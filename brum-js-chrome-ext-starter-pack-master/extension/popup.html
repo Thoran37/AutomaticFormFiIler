@@ -31,49 +31,70 @@
     </div>
 
     <!-- Document Management -->
-    <div id="documentManagement" class="document-section" style="display: none;">
+    <div class="document-section">
       <h2>Document Management</h2>
       
-      <!-- Required Documents -->
-      <div class="required-docs">
-        <h3>Required Documents</h3>
-        <div class="document-item">
-          <label>Aadhar Card *</label>
-          <button id="editAadhar" class="edit-btn">Edit</button>
+      <!-- Required Document -->
+      <div class="doc-group">
+        <h3>Required Document</h3>
+        <div class="document-form">
+          <h4>Aadhar Card *</h4>
+          <input type="text" id="aadharNumber" placeholder="Aadhar Number">
+          <input type="text" id="aadharName" placeholder="Name as per Aadhar">
+          <input type="date" id="aadharDob" placeholder="Date of Birth">
+          <textarea id="aadharAddress" placeholder="Address"></textarea>
         </div>
       </div>
 
       <!-- Optional Documents -->
-      <div class="optional-docs">
+      <div class="doc-group">
         <h3>Optional Documents</h3>
-        <div class="document-item">
-          <label>PAN Card</label>
-          <button id="editPan" class="edit-btn">Edit</button>
+        
+        <!-- PAN Card -->
+        <div class="document-form">
+          <h4>PAN Card</h4>
+          <input type="text" id="panNumber" placeholder="PAN Number">
+          <input type="text" id="panName" placeholder="Name as per PAN">
         </div>
-        <div class="document-item">
-          <label>10th Certificate</label>
-          <button id="edit10th" class="edit-btn">Edit</button>
+
+        <!-- 10th Certificate -->
+        <div class="document-form">
+          <h4>10th Certificate</h4>
+          <input type="text" id="schoolName" placeholder="School Name">
+          <input type="text" id="percentage" placeholder="Percentage/CGPA">
+          <input type="number" id="passingYear" placeholder="Year of Passing">
         </div>
-        <div class="document-item">
-          <label>License</label>
-          <button id="editLicense" class="edit-btn">Edit</button>
+
+        <!-- License -->
+        <div class="document-form">
+          <h4>License</h4>
+          <input type="text" id="licenseNumber" placeholder="License Number">
+          <input type="text" id="licenseName" placeholder="Name as per License">
+          <input type="date" id="licenseValidity" placeholder="Valid Until">
         </div>
-        <div class="document-item">
-          <label>Resume</label>
-          <button id="editResume" class="edit-btn">Edit</button>
+
+        <!-- Resume -->
+        <div class="document-form">
+          <h4>Resume</h4>
+          <textarea id="education" placeholder="Education Details"></textarea>
+          <textarea id="experience" placeholder="Work Experience"></textarea>
+          <textarea id="skills" placeholder="Skills"></textarea>
         </div>
       </div>
+
+      <button id="saveDocuments" class="primary-btn">Save Documents</button>
     </div>
 
-    <!-- Document Edit Modal -->
-    <div id="documentModal" class="modal" style="display: none;">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3 id="modalTitle">Edit Document</h3>
-        <form id="documentForm">
-          <!-- Form fields will be dynamically inserted here -->
-        </form>
-      </div>
+    <!-- Form Filling Actions -->
+    <div class="action-buttons">
+      <button id="fillFormBtn" class="primary-btn">Fill Current Form</button>
+      <button id="showFieldsBtn" class="secondary-btn">Show Detected Fields</button>
+    </div>
+
+    <!-- Detected Fields Display -->
+    <div id="detectedFields" class="detected-fields" style="display: none;">
+      <h3>Detected Form Fields</h3>
+      <div id="fieldsList"></div>
     </div>
   </div>
   <script src="popup.js"></script>

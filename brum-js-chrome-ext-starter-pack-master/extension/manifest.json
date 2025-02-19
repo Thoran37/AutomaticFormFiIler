@@ -8,12 +8,16 @@
     "storage",
     "scripting"
   ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "action": {
     "default_popup": "popup.html"
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["content.js"]
+    "js": ["content.js"],
+    "run_at": "document_end"
   }],
   "background": {
     "service_worker": "background.js"
