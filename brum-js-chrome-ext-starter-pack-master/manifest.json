@@ -1,6 +1,6 @@
 {
   "name": "Brum.js Chrome Extension",
-  "version": "1.3.3.7",
+  "version": "1.0.0.0",
   "manifest_version": 2,
   "description": "A boilerplate Google Chrome extension created for Brum.js. Starter kit created via Extensionizr.",
   "homepage_url": "https://brum.js.org/",
