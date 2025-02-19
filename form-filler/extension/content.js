@@ -1,69 +1,141 @@
-class FormFiller {
+class FormDetector {
   constructor() {
-    this.formFields = {};
+    this.formFields = [];
+    console.log('FormDetector initialized'); // Debug log
     this.init();
   }
 
   init() {
-    // Listen for form detection
-    document.addEventListener('DOMContentLoaded', () => {
-      this.detectForms();
-    });
-  }
-
-  detectForms() {
-    // Get all input fields
-    const inputs = document.querySelectorAll('input, select, textarea');
+    // Get current page URL
+    const currentUrl = window.location.href;
     
-    inputs.forEach(input => {
-      // Analyze input attributes and labels to determine field type
-      const fieldInfo = this.analyzeField(input);
-      if (fieldInfo) {
-        this.formFields[fieldInfo.type] = input;
+    // Send URL to Python server for scraping
+    fetch('http://localhost:5000/scrape-form', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url: currentUrl })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        this.formFields = data.fields;
+        console.log('Detected fields:', this.formFields);
+        this.showStatus('Fields detected successfully!');
+      } else {
+        console.error('Error detecting fields:', data.error);
+        this.showStatus('Error detecting fields');
       }
-    });
-
-    // Request data from background script
-    chrome.runtime.sendMessage({
-      action: 'getStoredData',
-      fields: Object.keys(this.formFields)
-    }, response => {
-      this.fillFormFields(response.data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      this.showStatus('Error connecting to server');
     });
   }
 
-  analyzeField(input) {
-    // Basic field analysis logic
-    const attributes = {
-      id: input.id.toLowerCase(),
-      name: input.name.toLowerCase(),
-      type: input.type,
-      label: this.findLabel(input)
-    };
-
-    // Match common patterns for different fields
-    if (attributes.id.includes('aadhar') || attributes.name.includes('aadhar')) {
-      return { type: 'aadhar', element: input };
+  showStatus(message) {
+    const statusDiv = document.getElementById('formFillerStatus') || 
+                     document.createElement('div');
+    statusDiv.id = 'formFillerStatus';
+    statusDiv.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10000;
+    `;
+    statusDiv.textContent = message;
+    if (!document.getElementById('formFillerStatus')) {
+      document.body.appendChild(statusDiv);
     }
-    // Add more field type detection logic here
+    setTimeout(() => {
+      statusDiv.remove();
+    }, 3000);
+  }
+
+  fillFields() {
+    chrome.storage.local.get(['userDetails', 'documents'], (result) => {
+      this.formFields.forEach(field => {
+        const element = this.findElementByField(field);
+        if (element) {
+          const value = this.findMatchingValue(field, result.userDetails, result.documents);
+          if (value) {
+            element.value = value;
+            element.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      });
+    });
+  }
+
+  findElementByField(field) {
+    let selector = '';
+    if (field.name) {
+      selector = `${field.tag}[name="${field.name}"]`;
+    } else {
+      selector = `${field.tag}[type="${field.type}"]`;
+    }
+    return document.querySelector(selector);
+  }
+
+  findMatchingValue(field, userDetails, documents) {
+    // Match field names with stored data
+    const fieldName = field.name?.toLowerCase() || '';
+    
+    // Basic matching logic
+    if (fieldName.includes('name')) return userDetails.fullName;
+    if (fieldName.includes('email')) return userDetails.email;
+    if (fieldName.includes('address')) return userDetails.address;
+    if (fieldName.includes('aadhar')) return documents.aadhar.number;
+    if (fieldName.includes('pan')) return documents.pan.number;
+    // Add more matching logic as needed
     
     return null;
   }
-
-  fillFormFields(data) {
-    for (const [fieldType, value] of Object.entries(data)) {
-      if (this.formFields[fieldType]) {
-        this.formFields[fieldType].value = value;
-      }
-    }
-  }
-
-  findLabel(input) {
-    // Logic to find associated label text
-    const label = input.labels?.[0]?.textContent || '';
-    return label.toLowerCase();
-  }
 }
 
-// Initialize form filler
-new FormFiller(); 
+// Initialize form detector
+const formDetector = new FormDetector();
+
+// Add a visual indicator for the extension
+const statusDiv = document.createElement('div');
+statusDiv.style.cssText = `
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  display: none;
+`;
+document.body.appendChild(statusDiv);
+
+// Listen for messages from popup/background
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('Received message:', request); // Debug log
+  
+  if (request.action === 'getDetectedFields') {
+    const fields = formDetector.formFields.map(f => ({
+      name: f.name,
+      type: f.type,
+      label: f.label
+    }));
+    console.log('Sending detected fields:', fields); // Debug log
+    sendResponse({ fields });
+  }
+  else if (request.action === 'fillFields') {
+    formDetector.fillFields();
+    statusDiv.textContent = 'Form fields filled!';
+    statusDiv.style.display = 'block';
+    setTimeout(() => {
+      statusDiv.style.display = 'none';
+    }, 3000);
+  }
+  return true;
+}); 
