@@ -1,102 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Form Filler Settings</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Initial Setup Form -->
-    <div id="initialSetup" class="setup-section">
-      <h2>Initial Setup</h2>
-      <form id="setupForm">
-        <div class="form-group">
-          <label for="fullName">Full Name *</label>
-          <input type="text" id="fullName" required>
-        </div>
-        <div class="form-group">
-          <label for="dob">Date of Birth *</label>
-          <input type="date" id="dob" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email *</label>
-          <input type="email" id="email" required>
-        </div>
-        <div class="form-group">
-          <label for="address">Address *</label>
-          <textarea id="address" required></textarea>
-        </div>
-        <button type="submit" class="primary-btn">Save Details</button>
-      </form>
-    </div>
-
-    <!-- Document Management -->
-    <div class="document-section">
-      <h2>Document Management</h2>
-      
-      <!-- Required Document -->
-      <div class="doc-group">
-        <h3>Required Document</h3>
-        <div class="document-form">
-          <h4>Aadhar Card *</h4>
-          <input type="text" id="aadharNumber" placeholder="Aadhar Number">
-          <input type="text" id="aadharName" placeholder="Name as per Aadhar">
-          <input type="date" id="aadharDob" placeholder="Date of Birth">
-          <textarea id="aadharAddress" placeholder="Address"></textarea>
-        </div>
+  <head>
+    <title>Form Filler Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="auth.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Initial Setup Form -->
+      <div id="initialSetup" class="setup-section">
+        <h2>Initial Setup</h2>
+        <form id="setupForm">
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" required />
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth *</label>
+            <input type="date" id="dob" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" required />
+          </div>
+          <div class="form-group">
+            <label for="address">Address *</label>
+            <textarea id="address" required></textarea>
+          </div>
+          <button type="submit" class="primary-btn">Save Details</button>
+        </form>
       </div>
 
-      <!-- Optional Documents -->
-      <div class="doc-group">
-        <h3>Optional Documents</h3>
-        
-        <!-- PAN Card -->
-        <div class="document-form">
-          <h4>PAN Card</h4>
-          <input type="text" id="panNumber" placeholder="PAN Number">
-          <input type="text" id="panName" placeholder="Name as per PAN">
+      <!-- Document Management -->
+      <div class="document-section">
+        <h2>Document Management</h2>
+
+        <!-- Required Document -->
+        <div class="doc-group">
+          <h3>Required Document</h3>
+          <div class="document-form">
+            <h4>Aadhar Card *</h4>
+            <input type="text" id="aadharNumber" placeholder="Aadhar Number" />
+            <input
+              type="text"
+              id="aadharName"
+              placeholder="Name as per Aadhar"
+            />
+            <input type="date" id="aadharDob" placeholder="Date of Birth" />
+            <textarea id="aadharAddress" placeholder="Address"></textarea>
+          </div>
         </div>
 
-        <!-- 10th Certificate -->
-        <div class="document-form">
-          <h4>10th Certificate</h4>
-          <input type="text" id="schoolName" placeholder="School Name">
-          <input type="text" id="percentage" placeholder="Percentage/CGPA">
-          <input type="number" id="passingYear" placeholder="Year of Passing">
+        <!-- Optional Documents -->
+        <div class="doc-group">
+          <h3>Optional Documents</h3>
+
+          <!-- PAN Card -->
+          <div class="document-form">
+            <h4>PAN Card</h4>
+            <input type="text" id="panNumber" placeholder="PAN Number" />
+            <input type="text" id="panName" placeholder="Name as per PAN" />
+          </div>
+
+          <!-- 10th Certificate -->
+          <div class="document-form">
+            <h4>10th Certificate</h4>
+            <input type="text" id="schoolName" placeholder="School Name" />
+            <input type="text" id="percentage" placeholder="Percentage/CGPA" />
+            <input
+              type="number"
+              id="passingYear"
+              placeholder="Year of Passing"
+            />
+          </div>
+
+          <!-- License -->
+          <div class="document-form">
+            <h4>License</h4>
+            <input
+              type="text"
+              id="licenseNumber"
+              placeholder="License Number"
+            />
+            <input
+              type="text"
+              id="licenseName"
+              placeholder="Name as per License"
+            />
+            <input type="date" id="licenseValidity" placeholder="Valid Until" />
+          </div>
+
+          <!-- Resume -->
+          <div class="document-form">
+            <h4>Resume</h4>
+            <textarea id="education" placeholder="Education Details"></textarea>
+            <textarea id="experience" placeholder="Work Experience"></textarea>
+            <textarea id="skills" placeholder="Skills"></textarea>
+          </div>
         </div>
 
-        <!-- License -->
-        <div class="document-form">
-          <h4>License</h4>
-          <input type="text" id="licenseNumber" placeholder="License Number">
-          <input type="text" id="licenseName" placeholder="Name as per License">
-          <input type="date" id="licenseValidity" placeholder="Valid Until">
-        </div>
-
-        <!-- Resume -->
-        <div class="document-form">
-          <h4>Resume</h4>
-          <textarea id="education" placeholder="Education Details"></textarea>
-          <textarea id="experience" placeholder="Work Experience"></textarea>
-          <textarea id="skills" placeholder="Skills"></textarea>
-        </div>
+        <button id="saveDocuments" class="primary-btn">Save Documents</button>
       </div>
 
-      <button id="saveDocuments" class="primary-btn">Save Documents</button>
-    </div>
+      <!-- Form Filling Actions -->
+      <div class="action-buttons">
+        <button id="fillFormBtn" class="primary-btn">Fill Current Form</button>
+        <button id="showFieldsBtn" class="secondary-btn">
+          Show Detected Fields
+        </button>
+      </div>
 
-    <!-- Form Filling Actions -->
-    <div class="action-buttons">
-      <button id="fillFormBtn" class="primary-btn">Fill Current Form</button>
-      <button id="showFieldsBtn" class="secondary-btn">Show Detected Fields</button>
+      <!-- Detected Fields Display -->
+      <div id="detectedFields" class="detected-fields" style="display: none">
+        <h3>Detected Form Fields</h3>
+        <div id="fieldsList"></div>
+      </div>
     </div>
-
-    <!-- Detected Fields Display -->
-    <div id="detectedFields" class="detected-fields" style="display: none;">
-      <h3>Detected Form Fields</h3>
-      <div id="fieldsList"></div>
-    </div>
-  </div>
-  <script src="popup.js"></script>
-</body>
-</html> 
+    <script src="popup.js"></script>
+  </body>
+</html>

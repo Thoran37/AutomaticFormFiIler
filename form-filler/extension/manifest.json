@@ -12,7 +12,7 @@
     "<all_urls>"
   ],
   "action": {
-    "default_popup": "signup.html"
+    "default_popup": "login.html"
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],

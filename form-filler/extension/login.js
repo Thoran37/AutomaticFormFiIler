@@ -10,12 +10,18 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-
     if (response.ok) {
-      alert("Login successful!");
-      window.location.href = "popup.html"; // Redirect to home page
+      console.log(response)
+      const { token } = await response.json();
+      console.log(token)
+      // Store JWT in localStorage
+      localStorage.setItem("jwtToken", token);
+
+      alert("Login successful! Redirecting...");
+      console.log("first")
+      window.location.href = "popup.html"; // Redirect to a dashboard or home page
     } else {
-      alert("Invalid credentials!");
+      alert("Invalid credentials. Please try again.");
     }
   } catch (error) {
     alert("Error logging in. Please try again later.");

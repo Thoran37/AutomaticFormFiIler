@@ -45,7 +45,6 @@ app.post("/signup", expressAsyncHandler(async (req, res) => {
 app.post("/login", expressAsyncHandler(async (req, res) => {
   const user = req.body;
   const dbUser = await users.findOne({ username: user.username });
-  console.log(dbUser)
   if (dbUser === null)
     res.send({ message: "Invalid username" });
   else {
