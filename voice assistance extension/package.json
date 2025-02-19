@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/stefankudev/brum-js-chrome-ext-starter-pack#readme",
   "dependencies": {
+    "brum-js-chrome-extension": "file:",
     "crx-hotreload": "^1.0.6"
   }
 }
