@@ -1,198 +1,152 @@
-class FormDetector {
-  constructor() {
-    this.formFields = [];
-    console.log('FormDetector initialized');
-    this.init();
-  }
-
-  init() {
-    this.detectFormFields();
-    console.log('Detected fields:', this.formFields);
-  }
-
-  detectFormFields() {
-    const inputs = document.querySelectorAll('input:not([type="submit"]):not([type="button"]), select, textarea');
-    inputs.forEach(input => {
-      const field = this.analyzeField(input);
-      if (field) {
-        this.formFields.push(field);
-      }
-    });
-  }
-
-  analyzeField(element) {
-    // Skip hidden or button fields
-    if (element.type === 'hidden' || 
-        element.type === 'submit' || 
-        element.type === 'button' || 
-        element.style.display === 'none') {
-      return null;
+// Check if FormDetector is already defined
+if (typeof FormDetector === 'undefined') {
+  class FormDetector {
+    constructor() {
+      this.formFields = [];
+      console.log('FormDetector initialized');
+      this.init();
     }
 
-    const name = element.name?.toLowerCase() || '';
-    const id = element.id?.toLowerCase() || '';
-    const placeholder = element.placeholder?.toLowerCase() || '';
-    const label = this.findLabel(element)?.toLowerCase() || '';
-    const className = element.className?.toLowerCase() || '';
-    const ariaLabel = element.getAttribute('aria-label')?.toLowerCase() || '';
-
-    const combinedText = `${name} ${id} ${placeholder} ${label} ${className} ${ariaLabel}`;
-    
-    return {
-      element: element,
-      name: name,
-      id: id,
-      label: label,
-      placeholder: placeholder,
-      fieldType: this.determineFieldType(combinedText, element.type),
-      combinedText: combinedText
-    };
-  }
-
-  findLabel(element) {
-    if (element.id) {
-      const label = document.querySelector(`label[for="${element.id}"]`);
-      if (label) return label.textContent.trim();
-    }
-    
-    const parentLabel = element.closest('label');
-    if (parentLabel) return parentLabel.textContent.trim();
-    
-    return '';
-  }
-
-  determineFieldType(text, inputType) {
-    text = text.toLowerCase();
-    
-    const patterns = {
-      name: /(?:full[ -]?name|name|first[ -]?name|last[ -]?name)/,
-      email: /(?:email|e-mail)/,
-      phone: /(?:phone|mobile|contact|tel)/,
-      address: /(?:address|street|city|state|country|zip|postal)/,
-      dob: /(?:dob|date[ -]?of[ -]?birth|birth[ -]?date)/,
-      aadhar: /(?:aadhar|aadhaar|uid|unique)/,
-      pan: /(?:pan|permanent[ -]?account[ -]?number)/,
-      gender: /(?:gender|sex)/,
-      pincode: /(?:pin|pincode|zip|postal)/,
-      city: /(?:city|town)/,
-      state: /(?:state|province)/
-    };
-
-    if (inputType === 'email') return 'email';
-    if (inputType === 'tel') return 'phone';
-    if (inputType === 'date') return 'dob';
-
-    for (const [type, pattern] of Object.entries(patterns)) {
-      if (pattern.test(text)) return type;
+    init() {
+      this.detectFormFields();
+      console.log('Detected fields:', this.formFields);
     }
 
-    return 'unknown';
-  }
-
-  fillFields(userData) {
-    console.log('Starting to fill fields with:', userData);
-    let filledCount = 0;
-    
-    this.formFields.forEach(field => {
-      console.log('Analyzing field:', {
-        type: field.fieldType,
-        name: field.name,
-        id: field.id,
-        label: field.label
+    detectFormFields() {
+      // Get all input, select, and textarea elements
+      const inputs = document.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        const field = this.analyzeField(input);
+        if (field) {
+          this.formFields.push(field);
+        }
       });
+    }
 
-      let valueToFill = this.getValueForField(field, userData);
+    analyzeField(element) {
+      // Skip hidden or submit/button type inputs
+      if (element.type === 'hidden' || 
+          element.type === 'submit' || 
+          element.type === 'button' || 
+          element.style.display === 'none') {
+        return null;
+      }
+
+      const name = element.name?.toLowerCase() || '';
+      const id = element.id?.toLowerCase() || '';
+      const placeholder = element.placeholder?.toLowerCase() || '';
+      const label = this.findLabel(element)?.toLowerCase() || '';
       
-      if (valueToFill) {
-        console.log(`Filling ${field.fieldType} with:`, valueToFill);
-        this.fillField(field.element, valueToFill);
-        filledCount++;
-      }
-    });
-
-    console.log(`Filled ${filledCount} fields out of ${this.formFields.length}`);
-  }
-
-  getValueForField(field, userData) {
-    const { fieldType, combinedText } = field;
-
-    // Aadhar data matching
-    if (userData.aadhar) {
-      if (fieldType === 'name' || /name/i.test(combinedText)) {
-        return userData.aadhar.name;
-      }
-      if (fieldType === 'dob' || /birth|dob/i.test(combinedText)) {
-        return userData.aadhar.dob;
-      }
-      if (fieldType === 'address' || /address/i.test(combinedText)) {
-        return userData.aadhar.address;
-      }
-      if (fieldType === 'aadhar' || /aadhar|aadhaar|uid/i.test(combinedText)) {
-        return userData.aadhar.number;
-      }
+      return {
+        element: element,
+        name: name,
+        id: id,
+        label: label,
+        placeholder: placeholder,
+        fieldType: this.determineFieldType(name, id, placeholder, label, element.type)
+      };
     }
 
-    // PAN data matching
-    if (userData.pan) {
-      if (fieldType === 'pan' || /pan|permanent/i.test(combinedText)) {
-        return userData.pan.number;
+    findLabel(element) {
+      // Try to find label by for attribute
+      if (element.id) {
+        const label = document.querySelector(`label[for="${element.id}"]`);
+        if (label) return label.textContent;
       }
-      if (fieldType === 'name' && !userData.aadhar) {
-        return userData.pan.name;
-      }
+      
+      // Try to find parent label
+      const parentLabel = element.closest('label');
+      if (parentLabel) return parentLabel.textContent;
+      
+      return '';
     }
 
-    return null;
-  }
+    determineFieldType(name, id, placeholder, label, inputType) {
+      const text = `${name} ${id} ${placeholder} ${label}`.toLowerCase();
+      
+      // Check for specific field types
+      if (/first.*name|fname|given.*name/i.test(text)) return 'firstName';
+      if (/middle.*name|mname/i.test(text)) return 'middleName';
+      if (/last.*name|lname|surname|family.*name/i.test(text)) return 'lastName';
+      if (/full.*name|name/i.test(text)) return 'fullName';
+      if (/email/i.test(text) || inputType === 'email') return 'email';
+      if (/birth|dob/i.test(text) || inputType === 'date') return 'dob';
+      if (/phone|mobile|contact/i.test(text) || inputType === 'tel') return 'phone';
+      if (/address/i.test(text)) return 'address';
+      if (/aadhar.*num/i.test(text)) return 'aadharNumber';
+      
+      return 'unknown';
+    }
 
-  fillField(element, value) {
-    try {
-      // Set the value
-      element.value = value;
+    fillFields(userData) {
+      console.log('Starting to fill fields with:', userData);
+      let filledCount = 0;
 
-      // Only trigger input and change events, not submit
-      ['input', 'change'].forEach(eventType => {
-        const event = new Event(eventType, { bubbles: true });
-        element.dispatchEvent(event);
+      this.formFields.forEach(field => {
+        console.log('Processing field:', field);
+        const value = this.getValueForField(field, userData);
+        
+        if (value) {
+          console.log(`Filling ${field.fieldType} with:`, value);
+          this.fillField(field.element, value);
+          filledCount++;
+        }
       });
-    } catch (error) {
-      console.error('Error filling field:', error);
+
+      console.log(`Filled ${filledCount} fields`);
+      return filledCount;
+    }
+
+    getValueForField(field, userData) {
+      const basic = userData.basic || {};
+      const aadhar = userData.aadhar || {};
+
+      switch(field.fieldType) {
+        case 'firstName':
+          return basic.firstName;
+        case 'middleName':
+          return basic.middleName;
+        case 'lastName':
+          return basic.lastName;
+        case 'fullName':
+          return `${basic.firstName || ''} ${basic.middleName || ''} ${basic.lastName || ''}`.trim();
+        case 'email':
+          return basic.email;
+        case 'dob':
+          return basic.dob;
+        case 'aadharNumber':
+          return aadhar.number;
+        case 'address':
+          return aadhar.address;
+        default:
+          return null;
+      }
+    }
+
+    fillField(element, value) {
+      try {
+        element.value = value;
+        element.dispatchEvent(new Event('input', { bubbles: true }));
+        element.dispatchEvent(new Event('change', { bubbles: true }));
+        console.log('Successfully filled field:', element, 'with value:', value);
+      } catch (error) {
+        console.error('Error filling field:', error);
+      }
     }
   }
 
-  showStatus(message) {
-    const statusDiv = document.getElementById('formFillerStatus') || 
-                     document.createElement('div');
-    statusDiv.id = 'formFillerStatus';
-    statusDiv.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #007bff;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      z-index: 10000;
-    `;
-    statusDiv.textContent = message;
-    if (!document.getElementById('formFillerStatus')) {
-      document.body.appendChild(statusDiv);
-    }
-    setTimeout(() => {
-      statusDiv.remove();
-    }, 3000);
+  // Initialize form detector only if not already initialized
+  if (typeof window.formDetector === 'undefined') {
+    window.formDetector = new FormDetector();
   }
 }
-
-// Initialize form detector
-const formDetector = new FormDetector();
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Received message:', request);
   
   if (request.action === 'getDetectedFields') {
-    const fields = formDetector.formFields.map(f => ({
+    const fields = window.formDetector.formFields.map(f => ({
       name: f.label || f.placeholder || f.name || f.id || 'Unnamed Field',
       type: f.fieldType
     }));
@@ -201,8 +155,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   else if (request.action === 'fillFields') {
     console.log('Filling fields with data:', request.data);
-    formDetector.fillFields(request.data);
-    sendResponse({ message: 'Fields filled successfully' });
+    const filledCount = window.formDetector.fillFields(request.data);
+    sendResponse({ message: `Successfully filled ${filledCount} fields` });
   }
   return true;
 });
