@@ -1,0 +1,78 @@
+/* Apply global styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Style the login container (increased size) */
+  form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px; /* Increased padding for a larger box */
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px; /* Increased width */
+  }
+  
+  /* Style input fields */
+  input {
+    width: 100%;
+    padding: 12px 20px 12px 12px; /* Adjust right padding to push text left */
+    margin: 15px 0;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  /* Special styling for input fields */
+  input[type="text"],
+  input[type="password"] {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  input::placeholder {
+    color: #ddd;
+  }
+  
+  /* Style the button */
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background: #e68900;
+  }
+  
+  /* Style the sign-up link */
+  p {
+    margin-top: 12px;
+  }
+  
+  a {
+    color: #ffeb3b;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
