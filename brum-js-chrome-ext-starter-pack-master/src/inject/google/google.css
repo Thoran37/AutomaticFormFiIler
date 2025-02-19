@@ -1,0 +1,4 @@
+/*Make the logo a bit bigger*/
+img[alt~="Google"] {
+  transform: scale(1.65);
+}

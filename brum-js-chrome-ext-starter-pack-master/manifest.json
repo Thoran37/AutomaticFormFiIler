@@ -1,0 +1,32 @@
+{
+  "name": "Brum.js Chrome Extension",
+  "version": "1.3.3.7",
+  "manifest_version": 2,
+  "description": "A boilerplate Google Chrome extension created for Brum.js. Starter kit created via Extensionizr.",
+  "homepage_url": "https://brum.js.org/",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "page": "src/bg/background.html",
+    "persistent": true
+  },
+  "options_page": "src/options_custom/index.html",
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_title": "Open the Brum.js Extension Popup",
+    "default_popup": "src/popup/popup.html"
+  },
+  "permissions": ["tabs", "storage", "<all_urls>", "http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "css": ["src/inject/google/google.css"],
+      "js": ["src/inject/google/google.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": ["images/*.*"]
+}

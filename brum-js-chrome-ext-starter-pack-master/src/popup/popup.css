@@ -1,0 +1,45 @@
+body {
+  width: 650px;
+  height: 400px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: rgb(42, 42, 42);
+  text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  color: black !important;
+  font-size: 4em;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  background: #ffdd00;
+  padding: 10px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white;
+  text-align: center;
+}
+
+button {
+  outline: none !important;
+  padding: 1rem;
+  margin: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 1rem;
+  border: solid #ffdd00bd 3px;
+  color: black;
+  background: #ffdd00;
+  box-shadow: 7px 7px 0px #ffdd008c;
+}
+
+button:active {
+  transition: all 0.15s ease;
+  box-shadow: 0px 0px 0px #ffdd00;
+  transform: translate(7px, 7px);
+}

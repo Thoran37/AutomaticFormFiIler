@@ -1,0 +1,23 @@
+{
+  "name": "brum-js-chrome-extension",
+  "version": "1.3.7",
+  "description": "A boilerplate Google Chrome extension created for Brum.js. Starter kit created via Extensionizr.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefankudev/brum-js-chrome-ext-starter-pack.git"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "starter kit"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefankudev/brum-js-chrome-ext-starter-pack/issues"
+  },
+  "homepage": "https://github.com/stefankudev/brum-js-chrome-ext-starter-pack#readme",
+  "dependencies": {
+    "crx-hotreload": "^1.0.6"
+  }
+}
