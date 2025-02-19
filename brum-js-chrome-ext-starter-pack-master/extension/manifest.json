@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Form Filler",
+  "version": "1.0",
+  "description": "Automatically fills forms using stored document data",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

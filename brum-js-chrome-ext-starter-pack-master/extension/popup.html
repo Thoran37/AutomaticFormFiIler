@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Filler Settings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Initial Setup Form -->
+    <div id="initialSetup" class="setup-section">
+      <h2>Initial Setup</h2>
+      <form id="setupForm">
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" required>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth *</label>
+          <input type="date" id="dob" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Address *</label>
+          <textarea id="address" required></textarea>
+        </div>
+        <button type="submit" class="primary-btn">Save Details</button>
+      </form>
+    </div>
+
+    <!-- Document Management -->
+    <div id="documentManagement" class="document-section" style="display: none;">
+      <h2>Document Management</h2>
+      
+      <!-- Required Documents -->
+      <div class="required-docs">
+        <h3>Required Documents</h3>
+        <div class="document-item">
+          <label>Aadhar Card *</label>
+          <button id="editAadhar" class="edit-btn">Edit</button>
+        </div>
+      </div>
+
+      <!-- Optional Documents -->
+      <div class="optional-docs">
+        <h3>Optional Documents</h3>
+        <div class="document-item">
+          <label>PAN Card</label>
+          <button id="editPan" class="edit-btn">Edit</button>
+        </div>
+        <div class="document-item">
+          <label>10th Certificate</label>
+          <button id="edit10th" class="edit-btn">Edit</button>
+        </div>
+        <div class="document-item">
+          <label>License</label>
+          <button id="editLicense" class="edit-btn">Edit</button>
+        </div>
+        <div class="document-item">
+          <label>Resume</label>
+          <button id="editResume" class="edit-btn">Edit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Edit Modal -->
+    <div id="documentModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modalTitle">Edit Document</h3>
+        <form id="documentForm">
+          <!-- Form fields will be dynamically inserted here -->
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 
