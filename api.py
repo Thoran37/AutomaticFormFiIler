@@ -6,9 +6,14 @@ from PIL import Image
 import numpy as np
 import os
 import tempfile
+import openai
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
+
+# Set your OpenAI API key
+OPENAI_API_KEY = "abcd"
+openai.api_key = OPENAI_API_KEY
 
 # Set Tesseract path (Windows) - adjust this path based on your installation
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -36,6 +41,65 @@ def process_image(image_file):
     
     return extracted_text.strip()
 
+def send_to_chatgpt(extracted_text):
+    prompt = f"""Extract the relevant details from the following text and structure them in the given JSON format:
+    
+    Text:
+    {extracted_text}
+    
+    Format:
+    username
+"Thoran"
+
+personalData
+Object
+
+aadhar
+Object
+number
+""
+name
+""
+dob
+""
+address
+""
+
+basic
+Object
+dob
+"13/11/2004"
+email
+"thoranmuvvala@gmail.com"
+firstName
+"Thoran"
+fullName
+"Thoran Chandra Muvvala"
+lastName
+"Muvvala"
+middleName
+"Chandra"
+mobileNumber
+"9888888888"
+
+pan
+Object
+name
+""
+number
+""
+    """
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that extracts structured data from text."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    
+    return response["choices"][0]["message"]["content"]
+
 @app.route('/api/process-image', methods=['POST'])
 def handle_ocr():
     try:
@@ -49,8 +113,12 @@ def handle_ocr():
         # Process the image
         extracted_text = process_image(image_file)
         
+        # Send extracted text to ChatGPT API
+        structured_data = send_to_chatgpt(extracted_text)
+        
         return jsonify({
             'text': extracted_text,
+            'structured_data': structured_data,
             'success': True
         })
         
