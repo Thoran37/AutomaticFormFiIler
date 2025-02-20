@@ -68,4 +68,9 @@ function findValueInStoredData(field, data) {
   // Implement logic to search through stored data
   // and find matching values for the requested field
   return null;
-} 
+}
+
+chrome.action.onClicked.addListener((tab) => {
+    const loginUrl = 'http://localhost:8000/login.html';
+    chrome.tabs.create({ url: loginUrl });
+}); 
