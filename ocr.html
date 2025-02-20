@@ -256,7 +256,7 @@
                 const formData = new FormData();
                 formData.append('image', file);
 
-                const response = await fetch('http://localhost:5000/api/process-image', {
+                const response = await fetch('http://localhost:5001/api/process-image', {
                     method: 'POST',
                     body: formData
                 });
@@ -273,6 +273,8 @@
                 
                 // Save to history
                 saveToHistory(file.name, data.text);
+                console.log(data.text);
+                });
 
             } catch (error) {
                 errorDisplay.textContent = error.message || 'Error processing image. Please try again.';
