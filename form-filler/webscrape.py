@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 driver = webdriver.Chrome()  # Ensure you have chromedriver installed
 
 # Open the webpage
-driver.get("https://blogapp-frontend-u8oa.onrender.com/")
+driver.get("https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html")
 
 # Find all input fields
 input_fields = driver.find_elements(By.TAG_NAME, "input")
