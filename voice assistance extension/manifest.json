@@ -1,7 +1,7 @@
 {
   "name": "voice Assistance",
   "version": "1.0.0.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "extension to enable voice assistance in chrome",
   "homepage_url": "https://brum.js.org/",
   "icons": {
@@ -19,14 +19,20 @@
     "default_title": "Open the formfiller.js Extension Popup",
     "default_popup": "src/popup/popup.html"
   },
-  "permissions": ["tabs", "storage", "<all_urls>", "http://*/*", "https://*/*"],
+  "permissions": ["tabs", "storage", "<all_urls>", "http://*/*", "https://*/*","scripting"],
   "content_scripts": [
-    {
-      "matches": ["https://www.google.com/*","https://www.docs.google.com/forms/*"],
-      "css": ["src/inject/google/google.css"],
-      "js": ["src/inject/google/google.js"],
-      "run_at": "document_end"
-    }
-  ],
-  "web_accessible_resources": ["images/*.*"]
+  {
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }
+]
+
+  ,
+  "web_accessible_resources": [
+  {
+    "resources": ["/images/Jcrop.gif", "/images/pixel.png"],
+    "matches": ["<all_urls>"]
+  }
+]
+
 }
