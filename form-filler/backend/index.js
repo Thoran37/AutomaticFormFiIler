@@ -9,6 +9,9 @@ const helmet = require('helmet');
 require('dotenv').config()
 app.use(exp.json())
 
+const cors = require('cors')
+app.use(cors());
+
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -22,7 +25,6 @@ let db, users, userData
 mongodb.connect(process.env.MONGODB_URI)
   .then(client => {
     console.log('Connected to MongoDB successfully!')
-    console.log('Database:', process.env.MONGODB_URI) // Log database URI (remove in production)
     db = client.db('database')
     users = db.collection('userscollection')
     userData = db.collection('userdatacollection')
@@ -101,9 +103,9 @@ app.post("/login", expressAsyncHandler(async (req, res) => {
     const signedToken = jwt.sign({ username: dbUser.username }, process.env.SECRET_KEY, { expiresIn: "1d" });
     console.log('Token generated successfully'); // Log token generation
 
-    res.status(200).send({ 
-      message: "Login successful", 
-      token: signedToken, 
+    res.status(200).send({
+      message: "Login successful",
+      token: signedToken,
       user: {
         username: dbUser.username
       }
@@ -123,9 +125,9 @@ app.get("/user-data", expressAsyncHandler(async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const username = decoded.username;
-    
+
     const userDataDoc = await userData.findOne({ username: username });
-    
+
     if (!userDataDoc) {
       res.status(404).send({ message: "User data not found" });
     } else {
@@ -153,7 +155,7 @@ app.put("/user-data", expressAsyncHandler(async (req, res) => {
 
     const result = await userData.updateOne(
       { username: username },
-      { 
+      {
         $set: { personalData: newData.personalData }
       },
       { upsert: true }
@@ -195,7 +197,7 @@ app.patch("/user-data/:docType", expressAsyncHandler(async (req, res) => {
     }
 
     const updatePath = `personalData.${docType}`;
-    
+
     const result = await userData.updateOne(
       { username: username },
       { $set: { [updatePath]: newData } }
@@ -207,8 +209,8 @@ app.patch("/user-data/:docType", expressAsyncHandler(async (req, res) => {
       // Verify the update
       const updatedDoc = await userData.findOne({ username: username });
       console.log('Updated document:', updatedDoc);
-      
-      res.send({ 
+
+      res.send({
         message: `${docType} data updated successfully`,
         data: updatedDoc.personalData[docType]
       });
